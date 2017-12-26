@@ -22,7 +22,7 @@ img_Height = 480
 class ReversiInterface(object):
 
     def __init__(self, reversi):
-        self.__reversi = reversi
+        self.reversi = reversi
 
         # initialize pygame
 
@@ -55,7 +55,7 @@ class ReversiInterface(object):
         # chess piece
         for row in range(0, n):
             for col in range(0, n):
-                state = self.__reversi.get_position_state(row, col)
+                state = self.reversi.get_position_state(row, col)
 
                 if state != BoardState.Empty:
                     (x, y) = self.transform_index2pixel(row, col)
@@ -75,13 +75,13 @@ class ReversiInterface(object):
         (x, y) = pygame.mouse.get_pos()
         (pos_row, pos_col) = self.transform_pixel2index(x, y)
 
-        print (x, y), (pos_row, pos_col)
+        #print (x, y), (pos_row, pos_col)
 
         if pos_row == None:
             raise Exception('Out of Board Range')
 
         try:
-            self.__reversi.move(pos_row, pos_col, safety_check = True)
+            self.reversi.move(pos_row, pos_col, safety_check = True)
         except:
             raise
         
@@ -96,7 +96,7 @@ class ReversiInterface(object):
             tips = tips + 'White Wins'
         else:
             tips = tips + 'Draw'
-        text = font.render(tips, True, (0, 0, 255))
+        text = font.render(tips, True, (240, 248, 255))
 
         self.__screen.blit(text, (img_Width / 2 - 200, img_Height / 2 - 50))
 

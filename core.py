@@ -1,6 +1,6 @@
 from enum import Enum
-from const import *
 from copy import deepcopy
+from const import *
 
 pos_shift = [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 initial_map = [[BoardState.Empty for j in range(n)] for i in range(n)]
@@ -25,13 +25,17 @@ class Reversi(object):
 	def get_chessMap(self):
 		return self.__chessMap
 
-	def get_position_state(self, i, j):
-		return self.__chessMap[i][j]
+	def get_position_state(self, row, col):
+		return self.__chessMap[row][col]
 
 	def get_chess_count(self):
 		return (self.__BlackCount, self.__WhiteCount)
 
-	def get_current_color(self):
+	def get_tot_chess_count(self):
+		# Serves as a quick check for winning condition
+		return self.__BlackCount + self.__WhiteCount
+
+	def get_current_state(self):
 		return self.__currentState
 
 	def get_reverse_state(self, chess):

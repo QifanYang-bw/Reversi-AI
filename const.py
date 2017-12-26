@@ -1,8 +1,5 @@
 from enum import Enum
 
-n = 8
-n_squared = n * n
-
 class BoardState(Enum):
     Empty = 0
     Black = 1
@@ -11,3 +8,11 @@ class BoardState(Enum):
 class PlayerState(Enum):
 	Human = 0
 	AI = 1
+
+n = 8
+n_squared = n * n
+
+AI_Search_Depth = 4
+inf = int(1e5)
+
+playerlist = [PlayerState.Human, PlayerState.AI]
