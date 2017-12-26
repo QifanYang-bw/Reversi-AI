@@ -10,7 +10,7 @@ class PlayerState(Enum):
 	AI = 1
 
 n = 8
-n_squared = n * n
+n_squared = n ** 2
 
 AI_Search_Depth = 4
 inf = int(1e5)

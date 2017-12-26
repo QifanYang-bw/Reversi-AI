@@ -65,6 +65,8 @@ class ReversiInterface(object):
                         self.__screen.blit(self.__img_piece_white, (x, y))
 
         pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
 
     #----------Interaction----------#
     def examine_and_move(self):
@@ -85,7 +87,7 @@ class ReversiInterface(object):
         except:
             raise
         
-        return
+        return (pos_row, pos_col)
 
     def draw_winner(self, result):
         font = pygame.font.SysFont('Arial', 55)
@@ -96,11 +98,13 @@ class ReversiInterface(object):
             tips = tips + 'White Wins'
         else:
             tips = tips + 'Draw'
-        text = font.render(tips, True, (240, 248, 255))
+        text = font.render(tips, True, (142, 202, 255))
 
         self.__screen.blit(text, (img_Width / 2 - 200, img_Height / 2 - 50))
 
         pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
 
 
 

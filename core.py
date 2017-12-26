@@ -11,6 +11,18 @@ for row in range(n // 2 - 1, n // 2 + 1):
 		else:
 			initial_map[row][col] = BoardState.Black
 
+# a = BoardState.Black
+# b = BoardState.White
+# c = BoardState.Empty
+# initial_Map       = [[a, a, a, a, a, a, a, c],
+# 					 [a, a, a, a, b, b, b, c],
+# 					 [a, a, a, a, a, a, a, a],
+# 					 [a, a, a, a, a, a, a, c],
+# 					 [a, b, a, a, a, a, a, a],
+# 					 [a, a, a, a, a, a, a, c],
+# 					 [a, a, a, a, a, a, c, c],
+# 					 [a, a, a, a, a, a, a, a]]
+
 class Reversi(object):
 	#----------Initialization----------#
 	def __init__(self, chessMap = None, currentState = None, BlackCount = -1, WhiteCount = -1):
