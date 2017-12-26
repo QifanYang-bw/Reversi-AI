@@ -14,7 +14,7 @@ def player_status(currentColor, playerList):
 	else:
 		raise Exception('Unknown Color Status')
 
-def Human_Turn(reversi, interface):
+def Human_turn(reversi, interface):
 	while True:
 		event = pygame.event.wait()
 		if event.type == QUIT:
@@ -46,7 +46,7 @@ def main():
 		current_player = player_status(reversi.get_current_color(), playerlist)
 
 		if current_player == PlayerState.Human:
-			Human_Turn(reversi, interface)
+			Human_turn(reversi, interface)
 		elif current_player == PlayerState.AI:
 			AI_turn(reversi, interface)
 		else:

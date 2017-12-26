@@ -48,8 +48,8 @@ class Reversi(object):
 	def __set_board_state(self, chessMap, currentState,
 						BlackCount = -1, WhiteCount = -1):
 		if len(chessMap) != n or len(chessMap[0]) != n:
-			raise ValueError('Board dimension mismatch: expected', 
-							 '(' + str(n) + ',' + str(n) + ')')
+			raise Exception('Board dimension mismatch: expected', 
+							'(' + str(n) + ',' + str(n) + ')')
 		if BlackCount == -1 or WhiteCount == -1:
 			BlackCount = 0
 			WhiteCount = 0

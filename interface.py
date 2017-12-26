@@ -90,14 +90,17 @@ class ReversiInterface(object):
     def draw_winner(self, result):
         font = pygame.font.SysFont('Arial', 55)
         tips = 'Game Over:'
-        if result == BoardState.BLACK:
+        if result == BoardState.Black:
             tips = tips + 'Black Wins'
-        elif result == BoardState.WHITE:
+        elif result == BoardState.White:
             tips = tips + 'White Wins'
         else:
             tips = tips + 'Draw'
         text = font.render(tips, True, (0, 0, 255))
-        self.__screen.blit(text, (WIDTH / 2 - 200, HEIGHT / 2 - 50))
+
+        self.__screen.blit(text, (img_Width / 2 - 200, img_Height / 2 - 50))
+
+        pygame.display.update()
 
 
 
