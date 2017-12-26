@@ -1,6 +1,6 @@
 # Reversi-AI
 
-For CS152 Course in future
+For CS152 Course.
 
 Type
 ```
