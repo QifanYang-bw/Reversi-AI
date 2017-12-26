@@ -3,9 +3,9 @@
 For CS152 Course in future
 
 Type
-'''
+```
 python game.py
-'''
-to start the program
+```
+to start the program.
 
-Methodology: DFS + Alpha Beta Pruning
+Methodology: DFS + Alpha Beta Pruning.
