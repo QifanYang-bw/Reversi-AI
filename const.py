@@ -1,8 +1,13 @@
 from enum import Enum
 
-N = 15
+n = 8
+n_squared = n * n
 
-class ChessboardState(Enum):
-    EMPTY = 0
-    BLACK = 1
-    WHITE = 2
+class BoardState(Enum):
+    Empty = 0
+    Black = 1
+    White = 2
+
+class PlayerState(Enum):
+	Human = 0
+	AI = 1
