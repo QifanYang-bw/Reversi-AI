@@ -42,9 +42,9 @@ class ReversiAI(object):
 
 		if condition.get_tot_chess_count() == n_squared:
 			if condition.check_winning_status()[1] == self.__currentState:
-				return (None, None, inf)
+				return (None, None, winning)
 			if condition.check_winning_status()[1] == self.__opponentState:
-				return (None, None, -inf)
+				return (None, None, -winning)
 			else:
 				return (None, None, 0)
 
@@ -69,11 +69,11 @@ class ReversiAI(object):
 			best_score = -inf
 			for child in branch:
 				_, _, child_score = self.alphabeta(child[3], depth + 1, alpha, beta)
-				if child_score >= best_score:
+				if child_score > best_score:
 					best_score = child_score
 					best_row = child[1]
 					best_col = child[2]
-					if best_score >= alpha:
+					if best_score > alpha:
 						alpha = best_score
 						if beta <= alpha:
 							break
@@ -82,11 +82,11 @@ class ReversiAI(object):
 			best_score = inf
 			for child in branch:
 				_, _, child_score = self.alphabeta(child[3], depth + 1, alpha, beta)
-				if child_score <= best_score:
+				if child_score < best_score:
 					best_score = child_score
 					best_row = child[1]
 					best_col = child[2]
-					if best_score <= beta:
+					if best_score < beta:
 						beta = best_score
 						if beta <= alpha:
 							break

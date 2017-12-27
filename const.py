@@ -14,5 +14,6 @@ n_squared = n ** 2
 
 AI_Search_Depth = 4
 inf = int(1e5)
+winning = int(1e4)
 
 playerlist = [PlayerState.Human, PlayerState.AI]
