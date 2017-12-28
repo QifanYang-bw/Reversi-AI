@@ -35,6 +35,18 @@ class ReversiInterface(object):
         self.__img_chessboard = pygame.image.load(Image_Path + 'chessboard.png').convert()
         self.__img_piece_black = pygame.image.load(Image_Path + 'c_black.png').convert_alpha()
         self.__img_piece_white = pygame.image.load(Image_Path + 'c_white.png').convert_alpha()
+        self.__img_piece_hint = pygame.image.load(Image_Path + 'c_hint.png').convert_alpha()
+
+    #----------Modules----------#
+    # Source for blit_alpha: http://www.nerdparadise.com/programming/pygameblitopacity
+    def blit_alpha(self, target, source, location, opacity):
+        x = location[0]
+        y = location[1]
+        temp = pygame.Surface((source.get_width(), source.get_height())).convert()
+        temp.blit(target, (-x, -y))
+        temp.blit(source, (0, 0))
+        temp.set_alpha(opacity)        
+        target.blit(temp, location)
 
     def transform_index2pixel(self, pos_row, pos_col):
         # Index to Coordinates
@@ -42,13 +54,13 @@ class ReversiInterface(object):
 
     def transform_pixel2index(self, x, y):
         # Coordinates to Index
-        if x < Left or x >= Right or x < Top or x >= Bottom:
+        if x < Left or x >= Right or y < Top or y >= Bottom:
             return (None, None)
 
         (i, j) = (int((y - Top) / Grid_Size), int((x - Left) / Grid_Size))
         return (i, j)
 
-    def refresh(self):
+    def redraw(self):
         # board
         self.__screen.blit(self.__img_chessboard, (0, 0))
 
@@ -64,9 +76,10 @@ class ReversiInterface(object):
                     elif state == BoardState.White:
                         self.__screen.blit(self.__img_piece_white, (x, y))
 
+    def update(self):
         pygame.display.update()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.QUIT: exit()
 
     #----------Interaction----------#
     def examine_and_move(self):
@@ -102,28 +115,38 @@ class ReversiInterface(object):
 
         self.__screen.blit(text, (img_Width / 2 - 200, img_Height / 2 - 50))
 
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
+    def draw_mouse_with_map(self, ava_map):
 
+        #----------Check the position of pointer----------#
+        (x, y) = pygame.mouse.get_pos()
+        (pos_row, pos_col) = self.transform_pixel2index(x, y)
+        if pos_row == None: return
+        #print (pos_row, pos_col)
 
+        self_state = self.reversi.get_current_state()
 
+        if ava_map[pos_row][pos_col] == self_state:
+            (out_x, out_y) = self.transform_index2pixel(pos_row, pos_col)
+            if self.reversi.get_current_state() == BoardState.Black:
+                self.blit_alpha(self.__screen, self.__img_piece_black, 
+                                (out_x, out_y),
+                                128)
+            else:
+                self.blit_alpha(self.__screen, self.__img_piece_white, 
+                                (out_x, out_y),
+                                128)
 
+    def draw_availability_map(self, ava_map = None):
+        self_state = self.reversi.get_current_state()
+        if ava_map == None:
+            ava_map = self.reversi.get_availability_map()
 
+        for row in range(0, n):
+            for col in range(0, n):
+                if ava_map[row][col] == self_state:
+                    (x, y) = self.transform_index2pixel(row, col)
+                    self.__screen.blit(self.__img_piece_hint, (x + 1, y + 2))
 
+        return ava_map
 
-
-
-    # def draw_mouse(self):
-
-    #     # track the mouse pointer
-    #     (x, y) = pygame.mouse.get_pos()
-
-    #     # chess piece moves with the mouse
-    #     if self.__currentPieceState == BoardState.BLACK:
-    #         self.__screen.blit(self.__ui_piece_black, (x - PIECE / 2, y
-    #                            - PIECE / 2))
-    #     else:
-    #         self.__screen.blit(self.__ui_piece_white, (x - PIECE / 2, y
-    #                            - PIECE / 2))
 

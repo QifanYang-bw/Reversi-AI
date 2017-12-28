@@ -17,7 +17,12 @@ def player_status(currentColor, playerList):
 
 #Could be rewritten as class structure
 def Human_turn(reversi, interface):
+	ava_map = None
 	while True:
+		interface.redraw()
+		ava_map = interface.draw_availability_map(ava_map = ava_map)
+		interface.draw_mouse_with_map(ava_map)
+		interface.update()
 
 		event = pygame.event.wait()
 		if event.type == QUIT:
@@ -30,6 +35,9 @@ def Human_turn(reversi, interface):
 			except Exception as e:
 				print 'Human:', e
 
+	interface.redraw()
+	interface.update()
+
 	return
 
 def AI_turn(Reversi_AI, interface):
@@ -37,12 +45,16 @@ def AI_turn(Reversi_AI, interface):
 
 	interface.reversi.move(pos_row, pos_col, safety_check = True)
 
+	interface.redraw()
+	interface.update()
+
 	return
 
 def main():
 	reversi = Reversi()
 	interface = ReversiInterface(reversi)
-	interface.refresh()
+	interface.redraw()
+	interface.update()
 
 	Reversi_AI = ReversiAI(reversi, depth = AI_Search_Depth)
 
@@ -62,18 +74,19 @@ def main():
 
 		print '(Black, White):', reversi.get_chess_count()
 
-		interface.refresh()
-
 		(Finished, Winner) = reversi.check_winning_status()
 
 	interface.draw_winner(Winner)
+	interface.update()
 
 	while True:
 		event = pygame.event.wait()
 		if event.type == QUIT:
 			exit()
-		#else:
-			#interface.refresh()
+		else:
+			interface.redraw()
+			interface.draw_winner(Winner)
+			interface.update()
 
 # Check if main.py is the called program
 if __name__ == '__main__':

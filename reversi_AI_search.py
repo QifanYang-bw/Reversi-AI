@@ -37,7 +37,7 @@ class ReversiAI(object):
 		return score
 
 	def alphabeta(self, condition, depth, alpha, beta):
-		if depth >= self.depth:
+		if depth > self.depth:
 			return (None, None, self.evaluate(condition))
 
 		if condition.get_tot_chess_count() == n_squared:
@@ -50,6 +50,7 @@ class ReversiAI(object):
 
 		branch = []
 		new_condition = deepcopy(condition)
+		#print depth, condition.get_chess_count()
 
 		for row in range(n):
 			for col in range(n):
@@ -58,6 +59,8 @@ class ReversiAI(object):
 					branch.append((self.evaluate(new_condition), row, col, new_condition))
 
 					new_condition = deepcopy(condition)
+					#print depth, condition.get_chess_count()
+
 				except:
 					pass
 
@@ -96,6 +99,7 @@ class ReversiAI(object):
 	def think(self):
 		self.__currentState = self.__reversi.get_current_state()
 		self.__opponentState = self.__reversi.get_opponent_state()
+		print self.__currentState, self.__opponentState
 
 		best_row, best_col, score = self.alphabeta(self.__reversi, 0, -inf, inf)
 

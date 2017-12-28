@@ -11,18 +11,6 @@ for row in range(n // 2 - 1, n // 2 + 1):
 		else:
 			initial_map[row][col] = BoardState.Black
 
-# a = BoardState.Black
-# b = BoardState.White
-# c = BoardState.Empty
-# initial_Map       = [[a, a, a, a, a, a, a, c],
-# 					 [a, a, a, a, b, b, b, c],
-# 					 [a, a, a, a, a, a, a, a],
-# 					 [a, a, a, a, a, a, a, c],
-# 					 [a, b, a, a, a, a, a, a],
-# 					 [a, a, a, a, a, a, a, c],
-# 					 [a, a, a, a, a, a, c, c],
-# 					 [a, a, a, a, a, a, a, a]]
-
 class Reversi(object):
 	#----------Initialization----------#
 	def __init__(self, chessMap = None, currentState = None, BlackCount = -1, WhiteCount = -1):
@@ -185,7 +173,7 @@ class Reversi(object):
 		self.__BlackCount += black_count_shift
 		self.__WhiteCount += white_count_shift
 		if self.__BlackCount < 0 or self.__WhiteCount < 0:
-			raise Exception('Negative Counter')
+			raise ValueError('Negative Counter')
 
 		self.__switch(self.__currentState, oppo_state)
 		return
@@ -226,4 +214,20 @@ class Reversi(object):
 				Winner = BoardState.Empty
 
 		return (Finished, Winner)
+
+	#----------User Output----------#
+	def get_availability_map(self):
+		self_state = self.__currentState
+		oppo_state = self.get_reverse_state(self_state)
+
+		ava_map = [[BoardState.Empty for j in range(n)] for i in range(n)]
+		flag = False
+		for row in range(n):
+			for col in range(n):
+				(valid, error_description) = self.validity_test(row, col, self_state, oppo_state)
+				#sprint row, col, (valid, error_description)
+				if valid:
+					ava_map[row][col] = self_state
+
+		return ava_map
 
