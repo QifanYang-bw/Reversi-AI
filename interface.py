@@ -76,6 +76,19 @@ class ReversiInterface(object):
                     elif state == BoardState.White:
                         self.__screen.blit(self.__img_piece_white, (x, y))
 
+        font = pygame.font.SysFont('Consolas', 44)
+        cur_black, cur_white = self.reversi.get_chess_count();
+
+        text = font.render(str(cur_black).zfill(2), True, (27, 27, 27))
+        pygame.draw.circle(self.__screen, (27, 27, 27), (525, 83), 20)
+        pygame.draw.circle(self.__screen, (64, 64, 64), (525, 83), 20, 2)
+        self.__screen.blit(text, (574, 69))
+
+        text = font.render(str(cur_white).zfill(2), True, (236, 236, 236))
+        pygame.draw.circle(self.__screen, (244, 255, 250), (525, 173), 20)
+        pygame.draw.circle(self.__screen, (188, 194, 192), (525, 173), 20, 2)
+        self.__screen.blit(text, (574, 159))
+
     def update(self):
         pygame.display.update()
         for event in pygame.event.get():
