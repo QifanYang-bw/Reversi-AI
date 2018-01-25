@@ -14,16 +14,16 @@ class ReversiAI(object):
 					 [8,  2,  2, 1, 1, 2, 2,  8],
 					 [10, 2,  2, 2, 2, 2, 2,  10],
 					 [52, 10, 8, 8, 8, 8, 10, 52]]
-	__currentState = None
-	__opponentState = None
 
 	def __init__(self, reversi, depth):
 		self.__reversi = reversi
 		self.depth = depth
+		self.__currentState = None
+		self.__opponentState = None
 
 	def evaluate(self, condition):
-		self_state = condition.get_current_state()
-		oppo_state = condition.get_opponent_state()
+		self_state = self.__currentState
+		oppo_state = self.__opponentState
 		score = 0
 
 		for row in range(n):
@@ -99,7 +99,6 @@ class ReversiAI(object):
 	def think(self):
 		self.__currentState = self.__reversi.get_current_state()
 		self.__opponentState = self.__reversi.get_opponent_state()
-		print self.__currentState, self.__opponentState
 
 		best_row, best_col, score = self.alphabeta(self.__reversi, 0, -inf, inf)
 
