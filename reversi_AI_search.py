@@ -69,32 +69,27 @@ class ReversiAI(object):
 
 		if condition.get_current_state() == self.__currentState:
 			branch.sort(key = lambda element:-element[0])
-			best_score = -inf
 			for child in branch:
 				_, _, child_score = self.alphabeta(child[3], depth + 1, alpha, beta)
-				if child_score > best_score:
-					best_score = child_score
+				if child_score > alpha:
+					alpha = child_score
+					if beta <= alpha:
+						break
 					best_row = child[1]
 					best_col = child[2]
-					if best_score > alpha:
-						alpha = best_score
-						if beta <= alpha:
-							break
+			return (best_row, best_col, alpha)
 		else:
 			branch.sort(key = lambda element:-element[0])
-			best_score = inf
 			for child in branch:
 				_, _, child_score = self.alphabeta(child[3], depth + 1, alpha, beta)
-				if child_score < best_score:
-					best_score = child_score
+				if child_score < beta:
+					beta = child_score
+					if beta <= alpha:
+						break
 					best_row = child[1]
 					best_col = child[2]
-					if best_score < beta:
-						beta = best_score
-						if beta <= alpha:
-							break
+			return (best_row, best_col, beta)
 
-		return (best_row, best_col, best_score)
 
 	def think(self):
 		self.__currentState = self.__reversi.get_current_state()
