@@ -19,6 +19,7 @@ Piece_Size = 32
 img_Width = 680
 img_Height = 480
 
+
 class ReversiInterface(object):
 
     def __init__(self, reversi):
@@ -32,20 +33,26 @@ class ReversiInterface(object):
         pygame.display.set_caption('Othello')
 
         # load UI resources
-        self.__img_chessboard = pygame.image.load(Image_Path + 'chessboard.png').convert()
-        self.__img_piece_black = pygame.image.load(Image_Path + 'c_black.png').convert_alpha()
-        self.__img_piece_white = pygame.image.load(Image_Path + 'c_white.png').convert_alpha()
-        self.__img_piece_hint = pygame.image.load(Image_Path + 'c_hint.png').convert_alpha()
+        self.__img_chessboard = pygame.image.load(
+            Image_Path + 'chessboard.png').convert()
+        self.__img_piece_black = pygame.image.load(
+            Image_Path + 'c_black.png').convert_alpha()
+        self.__img_piece_white = pygame.image.load(
+            Image_Path + 'c_white.png').convert_alpha()
+        self.__img_piece_hint = pygame.image.load(
+            Image_Path + 'c_hint.png').convert_alpha()
 
     #----------Modules----------#
-    # Source for blit_alpha: http://www.nerdparadise.com/programming/pygameblitopacity
+    # Source for blit_alpha:
+    # http://www.nerdparadise.com/programming/pygameblitopacity
     def blit_alpha(self, target, source, location, opacity):
         x = location[0]
         y = location[1]
-        temp = pygame.Surface((source.get_width(), source.get_height())).convert()
+        temp = pygame.Surface(
+            (source.get_width(), source.get_height())).convert()
         temp.blit(target, (-x, -y))
         temp.blit(source, (0, 0))
-        temp.set_alpha(opacity)        
+        temp.set_alpha(opacity)
         target.blit(temp, location)
 
     def transform_index2pixel(self, pos_row, pos_col):
@@ -77,7 +84,7 @@ class ReversiInterface(object):
                         self.__screen.blit(self.__img_piece_white, (x, y))
 
         font = pygame.font.SysFont('Consolas', 44)
-        cur_black, cur_white = self.reversi.get_chess_count();
+        cur_black, cur_white = self.reversi.get_chess_count()
 
         text = font.render(str(cur_black).zfill(2), True, (27, 27, 27))
         pygame.draw.circle(self.__screen, (27, 27, 27), (525, 83), 20)
@@ -92,7 +99,8 @@ class ReversiInterface(object):
     def update(self):
         pygame.display.update()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: exit()
+            if event.type == pygame.QUIT:
+                exit()
 
     #----------Interaction----------#
     def examine_and_move(self):
@@ -105,14 +113,14 @@ class ReversiInterface(object):
 
         #print (x, y), (pos_row, pos_col)
 
-        if pos_row == None:
+        if pos_row is None:
             raise Exception('Out of Board Range')
 
         try:
-            self.reversi.move(pos_row, pos_col, safety_check = True)
-        except:
+            self.reversi.move(pos_row, pos_col, safety_check=True)
+        except BaseException:
             raise
-        
+
         return (pos_row, pos_col)
 
     def draw_winner(self, result):
@@ -133,7 +141,8 @@ class ReversiInterface(object):
         #----------Check the position of pointer----------#
         (x, y) = pygame.mouse.get_pos()
         (pos_row, pos_col) = self.transform_pixel2index(x, y)
-        if pos_row == None: return
+        if pos_row is None:
+            return
         #print (pos_row, pos_col)
 
         self_state = self.reversi.get_current_state()
@@ -141,17 +150,17 @@ class ReversiInterface(object):
         if ava_map[pos_row][pos_col] == self_state:
             (out_x, out_y) = self.transform_index2pixel(pos_row, pos_col)
             if self.reversi.get_current_state() == BoardState.Black:
-                self.blit_alpha(self.__screen, self.__img_piece_black, 
+                self.blit_alpha(self.__screen, self.__img_piece_black,
                                 (out_x, out_y),
                                 128)
             else:
-                self.blit_alpha(self.__screen, self.__img_piece_white, 
+                self.blit_alpha(self.__screen, self.__img_piece_white,
                                 (out_x, out_y),
                                 128)
 
-    def draw_availability_map(self, ava_map = None):
+    def draw_availability_map(self, ava_map=None):
         self_state = self.reversi.get_current_state()
-        if ava_map == None:
+        if ava_map is None:
             ava_map = self.reversi.get_availability_map()
 
         for row in range(0, n):
@@ -161,5 +170,3 @@ class ReversiInterface(object):
                     self.__screen.blit(self.__img_piece_hint, (x + 1, y + 2))
 
         return ava_map
-
-
