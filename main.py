@@ -30,10 +30,10 @@ def Human_turn(reversi, interface):
 		elif event.type == MOUSEBUTTONDOWN:
 			try:
 				row, col = interface.examine_and_move()
-				print 'Human:', (row, col)
+				print('Human:', (row, col))
 				break
 			except Exception as e:
-				print 'Human:', e
+				print('Human:', e)
 
 	interface.redraw()
 	interface.update()
@@ -63,7 +63,7 @@ def main():
 	while not Finished:
 		current_player = player_status(reversi.get_current_state(), playerlist)
 
-		print '\nState:', reversi.get_current_state()
+		print('\nState:', reversi.get_current_state())
 
 		if current_player == PlayerState.Human:
 			Human_turn(reversi, interface)
@@ -72,7 +72,7 @@ def main():
 		else:
 			raise Exception('Unknown Player Status')
 
-		print '(Black, White):', reversi.get_chess_count()
+		print('(Black, White):', reversi.get_chess_count())
 
 		(Finished, Winner) = reversi.check_winning_status()
 

@@ -97,7 +97,7 @@ class ReversiAI(object):
 
 		best_row, best_col, score = self.alphabeta(self.__reversi, 0, -inf, inf)
 
-		print 'AI   :', (best_row, best_col), 'Evaluation Score:', score
+		print('AI   :', (best_row, best_col), 'Evaluation Score:', score)
 
 		return best_row, best_col
 
