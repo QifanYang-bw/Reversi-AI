@@ -102,7 +102,6 @@ def Human_turn(reversi, interface):
 
     return
 
-
 def AI_turn(Reversi_AI, interface):
     """ AI_turn function with no output.
 

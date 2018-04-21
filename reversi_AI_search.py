@@ -45,9 +45,11 @@ class ReversiAI(object):
         self.__opponentState = None
 
     def evaluate(self, condition):
-        """ The evaluate function. Score is evaluated as the sum of
-        the position value (self as 1, opponent as -1) multiplied by
-        the weight matrix value.
+        """ The evaluate function.
+
+        The Score is evaluated as the sum of the position value
+        (self as 1, opponent as -1) multiplied by the weight
+        matrix value.
         """
         self_state = self.__currentState
         oppo_state = self.__opponentState

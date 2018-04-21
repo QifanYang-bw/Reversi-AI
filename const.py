@@ -21,4 +21,4 @@ AI_Search_Depth = 3
 inf = int(1e8)
 winning = int(1e4)
 
-playerlist = [PlayerState.Human, PlayerState.AI]
+playerlist = [PlayerState.Human, PlayerState.Human]

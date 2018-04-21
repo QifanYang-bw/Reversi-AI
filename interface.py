@@ -139,7 +139,6 @@ class ReversiInterface(object):
 
         (x, y) = pygame.mouse.get_pos()
         (pos_row, pos_col) = self.transform_pixel2index(x, y)
-        print(x, y, pos_row, pos_col)
 
         if pos_row is None:
             raise Exception('Out of Board Range')
