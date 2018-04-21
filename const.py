@@ -1,6 +1,6 @@
+import os
+
 from enum import Enum
-
-
 class BoardState(Enum):
     Empty = 0
     Black = 1
@@ -11,6 +11,8 @@ class PlayerState(Enum):
     Human = 0
     AI = 1
 
+
+dirname = os.path.dirname(__file__)
 
 n = 8
 n_squared = n ** 2

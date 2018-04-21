@@ -1,9 +1,20 @@
+""" interface.py
+
+Contains the Reversi Interface class.
+"""
+
 import pygame
 from pygame.locals import *
 from const import *
 from core import *
 
+""" Initialization """
+
 Image_Path = 'image/'
+
+""" The length and size data here consists with the board
+image.
+"""
 
 Left = 60
 Top = 60
@@ -21,18 +32,24 @@ img_Height = 480
 
 
 class ReversiInterface(object):
+    """ReversiInterface object that connects Reverse with User
+    Interface. Draws the board throughout the game.
+
+    Attributes:
+        reversi: reversi object.
+    """
 
     def __init__(self, reversi):
         self.reversi = reversi
 
-        # initialize pygame
+        # Initialize pygame.
 
         pygame.init()
 
         self.__screen = pygame.display.set_mode((img_Width, img_Height), 0, 32)
         pygame.display.set_caption('Othello')
 
-        # load UI resources
+        # Load UI resources
         self.__img_chessboard = pygame.image.load(
             Image_Path + 'chessboard.png').convert()
         self.__img_piece_black = pygame.image.load(
@@ -42,10 +59,13 @@ class ReversiInterface(object):
         self.__img_piece_hint = pygame.image.load(
             Image_Path + 'c_hint.png').convert_alpha()
 
-    #----------Modules----------#
-    # Source for blit_alpha:
-    # http://www.nerdparadise.com/programming/pygameblitopacity
+    
     def blit_alpha(self, target, source, location, opacity):
+        """ Draws transparent image on window.
+
+        Source for blit_alpha:
+        http://www.nerdparadise.com/programming/pygameblitopacity
+        """
         x = location[0]
         y = location[1]
         temp = pygame.Surface(
@@ -56,11 +76,15 @@ class ReversiInterface(object):
         target.blit(temp, location)
 
     def transform_index2pixel(self, pos_row, pos_col):
-        # Index to Coordinates
+        """ Returns the window position according to the board
+        position.
+        """
         return (Top + pos_col * Grid_Size, Left + pos_row * Grid_Size)
 
     def transform_pixel2index(self, x, y):
-        # Coordinates to Index
+        """ Returns the board position according to the window
+        position.
+        """
         if x < Left or x >= Right or y < Top or y >= Bottom:
             return (None, None)
 
@@ -68,10 +92,12 @@ class ReversiInterface(object):
         return (i, j)
 
     def redraw(self):
-        # board
+        """ Draws the board."""
+
+        """ Board Image """
         self.__screen.blit(self.__img_chessboard, (0, 0))
 
-        # chess piece
+        """ Chess Image """
         for row in range(0, n):
             for col in range(0, n):
                 state = self.reversi.get_position_state(row, col)
@@ -83,6 +109,7 @@ class ReversiInterface(object):
                     elif state == BoardState.White:
                         self.__screen.blit(self.__img_piece_white, (x, y))
 
+        """ Info Panel """
         font = pygame.font.SysFont('Consolas', 44)
         cur_black, cur_white = self.reversi.get_chess_count()
 
@@ -97,6 +124,7 @@ class ReversiInterface(object):
         self.__screen.blit(text, (574, 159))
 
     def update(self):
+        """ Update the board."""
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -104,14 +132,14 @@ class ReversiInterface(object):
 
     #----------Interaction----------#
     def examine_and_move(self):
+        """ Examine and move when user acts."""
         mouse_button = pygame.mouse.get_pressed()
         if not mouse_button[0]:
             raise Exception('Not a Left Click')
 
         (x, y) = pygame.mouse.get_pos()
         (pos_row, pos_col) = self.transform_pixel2index(x, y)
-
-        #print (x, y), (pos_row, pos_col)
+        print(x, y, pos_row, pos_col)
 
         if pos_row is None:
             raise Exception('Out of Board Range')
@@ -124,6 +152,7 @@ class ReversiInterface(object):
         return (pos_row, pos_col)
 
     def draw_winner(self, result):
+        """ Draw the Winning Info """
         font = pygame.font.SysFont('Arial', 55)
         tips = 'Game Over:'
         if result == BoardState.Black:
@@ -137,28 +166,34 @@ class ReversiInterface(object):
         self.__screen.blit(text, (img_Width / 2 - 200, img_Height / 2 - 50))
 
     def draw_mouse_with_map(self, ava_map):
+        """ Display the transparent chess when user moves their
+        mouse onto an available position. 
+        """
 
-        #----------Check the position of pointer----------#
+        """ Check the position of pointer """
         (x, y) = pygame.mouse.get_pos()
         (pos_row, pos_col) = self.transform_pixel2index(x, y)
         if pos_row is None:
             return
-        #print (pos_row, pos_col)
 
         self_state = self.reversi.get_current_state()
 
         if ava_map[pos_row][pos_col] == self_state:
             (out_x, out_y) = self.transform_index2pixel(pos_row, pos_col)
             if self.reversi.get_current_state() == BoardState.Black:
-                self.blit_alpha(self.__screen, self.__img_piece_black,
+                self.blit_alpha(self.__screen,
+                                self.__img_piece_black,
                                 (out_x, out_y),
                                 128)
             else:
-                self.blit_alpha(self.__screen, self.__img_piece_white,
+                self.blit_alpha(self.__screen,
+                                self.__img_piece_white,
                                 (out_x, out_y),
                                 128)
 
     def draw_availability_map(self, ava_map=None):
+        """ Display the possible position hints for user.
+        """
         self_state = self.reversi.get_current_state()
         if ava_map is None:
             ava_map = self.reversi.get_availability_map()

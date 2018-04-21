@@ -1,3 +1,8 @@
+""" core.py
+
+Contains the Reversi core class.
+"""
+
 from enum import Enum
 from copy import deepcopy
 from const import *
@@ -14,13 +19,21 @@ for row in range(n // 2 - 1, n // 2 + 1):
 
 
 class Reversi(object):
-    #----------Initialization----------#
+    """Reversi object that manages the entire game status.
+
+    Attributes:
+        __chessMap: 2-D List. the board status.
+        __currentState: 2-D List. the current active player.
+        __BlackCount: int. the total number of black pieces.
+        __WhiteCount: int. the total number of white pieces.
+    """
     def __init__(
             self,
             chessMap=None,
             currentState=None,
             BlackCount=-1,
-            WhiteCount=-1):
+            WhiteCount=-1
+    ):
         if chessMap is None:
             self.__chessMap = deepcopy(initial_map)
             self.__currentState = BoardState.Black
@@ -28,25 +41,67 @@ class Reversi(object):
             self.__WhiteCount = 2
         else:
             self.__set_board_state(
-                chessMap, currentState, BlackCount, WhiteCount)
+                chessMap,
+                currentState,
+                BlackCount,
+                WhiteCount
+            )
 
     def get_chessMap(self):
+        """ Get the current 2-D board.
+        For separation of concerns.
+
+        Output:
+            List object, represents the chess map in 2-D
+        List.
+        """
         return self.__chessMap
 
     def get_position_state(self, row, col):
+        """ Get the state in a a specific.
+        For separation of concerns.
+
+        Output:
+            BoardState object, represents the state in a
+        specific position.
+        """
         return self.__chessMap[row][col]
 
     def get_chess_count(self):
+        """ Get the total number of chesses in black and white.
+        For separation of concerns.
+
+        Output:
+            List object with 2 elements.
+        """
         return (self.__BlackCount, self.__WhiteCount)
 
     def get_tot_chess_count(self):
-        # Serves as a quick check for winning condition
+        """ Get the total number of all chesses.
+        Serves for separation of concerns, also as a quick check
+        for game-ending condition.
+
+        Output:
+            Int object.
+        """
         return self.__BlackCount + self.__WhiteCount
 
     def get_current_state(self):
+        """ Get the current game player.
+        For separation of concerns.
+
+        Output:
+            Int object.
+        """
         return self.__currentState
 
     def get_reverse_state(self, chess):
+        """ Get the reverse state of a certain state.
+        Input:
+            chess: BoardState object.
+        Output:
+            BoardState object.
+        """
         if chess == BoardState.Black:
             return BoardState.White
         elif chess == BoardState.White:
@@ -55,10 +110,22 @@ class Reversi(object):
             raise Exception('State is empty')
 
     def get_opponent_state(self):
+        """ Get the player state that are not in action.
+
+        Output:
+            BoardState object.
+        """
         return self.get_reverse_state(self.__currentState)
 
     def __set_board_state(self, chessMap, currentState,
                           BlackCount=-1, WhiteCount=-1):
+        """Set the state when a chessMap is given. For convenience
+        of Searching.
+
+        Input:
+            Same as self.__init__().
+        """
+
         if len(chessMap) != n or len(chessMap[0]) != n:
             raise Exception('Board dimension mismatch: expected',
                             '(' + str(n) + ',' + str(n) + ')')
@@ -78,11 +145,19 @@ class Reversi(object):
         self.__currentState = currentState
 
     def swap_state(self):
+        """Move the currentState to the other player."""
         self.__currentState = self.get_opponent_state()
 
-    #----------Move----------#
     def position_test(self, pos_row, pos_col):
-        return pos_row >= 0 and pos_row < n and pos_col >= 0 and pos_col < n
+        """Check whether (pow_row, pos_col) is a valid position.
+
+        Output:
+            Bool object.
+        """
+        return pos_row >= 0 and \
+               pos_row < n and \
+               pos_col >= 0 and \
+               pos_col < n
 
     def __extend(
             self,
@@ -91,7 +166,19 @@ class Reversi(object):
             self_state,
             oppo_state,
             xshift,
-            yshift):
+            yshift
+        ):
+
+        """Check whether (pow_row, pos_col) is a valid position.
+
+        Input:
+            pos_row, pos_col: Position of the possible move position.
+            self_state, oppo_state: BoardState objects.
+            xshift, yshift: Shift vector.
+        Output:
+            Tuple object consisting of succeed status and flip.
+        count.
+        """
         count = 0
         flag = True
         if_succeed = False
@@ -115,12 +202,18 @@ class Reversi(object):
                 # Failed to connect with anchored piece - Out of board
                 flag = False
 
-        # print pos_row, pos_col, (if_succeed, count)
-        # if pos_row == 2 and pos_col == 2:
-            #print (if_succeed, count)
         return (if_succeed, count)
 
     def __flip(self, pos_row, pos_col, self_state, oppo_state):
+        """Flip the related pieces after the move.
+
+        Input:
+            pos_row, pos_col: Position of the possible move position.
+            self_state, oppo_state: BoardState objects.
+        Output:
+            Tuple object consisting of change in counts for both sides.
+        count.
+        """
         flip_count = 0
 
         for (xshift, yshift) in pos_shift:
@@ -143,6 +236,8 @@ class Reversi(object):
         raise ValueError('Unknown Board State')
 
     def __switch(self, self_state, oppo_state):
+        """Switch the current State of player.
+        """
         if self.check_availability(oppo_state):
             self.__currentState = oppo_state
         else:
@@ -150,6 +245,12 @@ class Reversi(object):
         return
 
     def validity_test(self, pos_row, pos_col, self_state, oppo_state):
+        """Test if the current State is valid.
+
+        Output:
+            Tuple object consists of success bool indicators and error
+        message.
+        """
         if not self.position_test(pos_row, pos_col):
             if pos_row < 0 or pos_row >= n:
                 return (False, 'Row index out of range')
@@ -172,6 +273,14 @@ class Reversi(object):
             return (False, 'Invalid move')
 
     def move(self, pos_row, pos_col, safety_check=True):
+        """Make a move on the board.
+
+        Input:
+            pos_row, pos_col: Position of the possible move position.
+            safety_check: Bool object, indicate whether it is
+        necessary to perform check beforehand. The parameter is given
+        to boost performance.
+        """
         oppo_state = self.get_opponent_state()
 
         if safety_check:
@@ -188,7 +297,6 @@ class Reversi(object):
 
         (black_count_shift, white_count_shift) = self.__flip(
             pos_row, pos_col, self.__currentState, oppo_state)
-        #print (black_count_shift, white_count_shift)
         self.__BlackCount += black_count_shift
         self.__WhiteCount += white_count_shift
         if self.__BlackCount < 0 or self.__WhiteCount < 0:
@@ -199,17 +307,29 @@ class Reversi(object):
 
     #----------Status Check----------#
     def check_availability(self, self_state=None):
+        """Output if there is any available position for current
+        player on the board.
+
+        Input:
+            self_state: BoardState objects indicating the color of 
+        piece for state checking. Default value is set to 
+        self.__currentState.
+        Output:
+            Bool object.
+        """
         if self_state is None:
             self_state = self.__currentState
 
-        # Could be optimized
         oppo_state = self.get_reverse_state(self_state)
         flag = False
         for row in range(n):
             for col in range(n):
                 (valid, error_description) = self.validity_test(
-                    row, col, self_state, oppo_state)
-                # sprint row, col, (valid, error_description)
+                    row, 
+                    col,
+                    self_state,
+                    oppo_state
+                )
                 if valid:
                     flag = True
                     break
@@ -218,6 +338,12 @@ class Reversi(object):
         return flag
 
     def check_winning_status(self):
+        """Check the winner status.
+
+        Output:
+            Tuple object, consists of Bool indicator and the winnger in
+        BoardState object.
+        """
         Finished = False
         Winner = None
 
@@ -236,18 +362,30 @@ class Reversi(object):
 
         return (Finished, Winner)
 
-    #----------User Output----------#
     def get_availability_map(self):
+        """Returns the possible position for the current move.
+
+        Cooperates with ReversiInterface.draw_availability_map().
+
+        Output:
+            2D List with available positions.
+        """
         self_state = self.__currentState
         oppo_state = self.get_reverse_state(self_state)
 
+        """
+        The following line is faster than deepcopy().
+        """
         ava_map = [[BoardState.Empty for j in range(n)] for i in range(n)]
         flag = False
         for row in range(n):
             for col in range(n):
                 (valid, error_description) = self.validity_test(
-                    row, col, self_state, oppo_state)
-                # sprint row, col, (valid, error_description)
+                    row,
+                    col,
+                    self_state,
+                    oppo_state
+                )
                 if valid:
                     ava_map[row][col] = self_state
 
