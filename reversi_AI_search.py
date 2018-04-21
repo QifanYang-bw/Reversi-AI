@@ -29,15 +29,14 @@ class ReversiAI(object):
     and the pieces placed on the edge could only be flipped with other
     pieces on the same edge.
     """
-    weight_matrix = [[52, 10, 8, 8, 8, 8, 10, 52],
-                     [10, 2, 2, 2, 2, 2, 2, 10],
-                     [8, 2, 2, 1, 1, 2, 2, 8],
-                     [8, 2, 1, 2, 2, 1, 2, 8],
-                     [8, 2, 1, 2, 2, 1, 2, 8],
-                     [8, 2, 2, 1, 1, 2, 2, 8],
-                     [10, 2, 2, 2, 2, 2, 2, 10],
-                     [52, 10, 8, 8, 8, 8, 10, 52]]
-
+    weight_matrix = [[16, 4, 4, 4, 4, 4, 4, 16],
+                     [4, 1, 1, 1, 1, 1, 1, 4],
+                     [4, 1, 1, 1, 1, 1, 1, 4],
+                     [4, 1, 1, 1, 1, 1, 1, 4],
+                     [4, 1, 1, 1, 1, 1, 1, 4],
+                     [4, 1, 1, 1, 1, 1, 1, 4],
+                     [4, 1, 1, 1, 1, 1, 1, 4],
+                     [16, 4, 4, 4, 4, 4, 4, 16]]
     def __init__(self, reversi, depth):
         self.__reversi = reversi
         self.depth = depth
@@ -124,6 +123,12 @@ class ReversiAI(object):
                         break
                     best_row = child[1]
                     best_col = child[2]
+            if depth == 0 and best_col == None:
+                raise Exception(
+                    'None value detected for AI; ' + \
+                    'The current branch info is' + \
+                    map(lambda x:(x[1], x[2]), branch)
+                )
             return (best_row, best_col, alpha)
         else:
             """ Our opponent's turn """
