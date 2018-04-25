@@ -17,7 +17,7 @@ dirname = os.path.dirname(__file__)
 n = 8
 n_squared = n ** 2
 
-AI_Search_Depth = 3
+AI_Search_Depth = 2
 inf = int(1e8)
 winning = int(1e4)
 

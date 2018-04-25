@@ -83,14 +83,6 @@ class ReversiAI(object):
         if depth > self.depth:
             return (None, None, self.evaluate(condition))
 
-        if condition.get_tot_chess_count() == n_squared:
-            if condition.check_winning_status()[1] == self.__currentState:
-                return (None, None, winning)
-            if condition.check_winning_status()[1] == self.__opponentState:
-                return (None, None, -winning)
-            else:
-                return (None, None, 0)
-
         """ Gather possible moves within an array. """
 
         branch = []
@@ -108,6 +100,19 @@ class ReversiAI(object):
                 except BaseException:
                     pass
 
+        """ Check winning status here to prevent redundant
+        condition checks.
+        """
+
+        if condition.get_tot_chess_count() == n_squared or \
+           len(branch) == 0:
+            if condition.check_winning_status()[1] == self.__currentState:
+                return (None, None, winning)
+            if condition.check_winning_status()[1] == self.__opponentState:
+                return (None, None, -winning)
+            else:
+                return (None, None, 0)
+
         best_row = None
         best_col = None
 
@@ -123,12 +128,7 @@ class ReversiAI(object):
                         break
                     best_row = child[1]
                     best_col = child[2]
-            if depth == 0 and best_col == None:
-                raise Exception(
-                    'None value detected for AI; ' + \
-                    'The current branch info is' + \
-                    map(lambda x:(x[1], x[2]), branch)
-                )
+
             return (best_row, best_col, alpha)
         else:
             """ Our opponent's turn """
@@ -142,6 +142,7 @@ class ReversiAI(object):
                         break
                     best_row = child[1]
                     best_col = child[2]
+
             return (best_row, best_col, beta)
 
     def think(self):

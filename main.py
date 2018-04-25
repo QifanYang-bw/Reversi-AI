@@ -114,9 +114,13 @@ def AI_turn(Reversi_AI, interface):
     Output:
         None.
     """
-    (pos_row, pos_col) = Reversi_AI.think()
+    try:
+        (pos_row, pos_col) = Reversi_AI.think()
 
-    interface.reversi.move(pos_row, pos_col, safety_check=True)
+        interface.reversi.move(pos_row, pos_col, safety_check=True)
+    except Exception as e:
+        print('AI Error:', e)
+        exit()
 
     interface.redraw()
     interface.update()
@@ -146,7 +150,7 @@ def main():
         two continuous rounds
         """
         current_player = player_status(reversi.get_current_state(), playerlist)
-
+ 
         print('\nState:', reversi.get_current_state())
 
         if current_player == PlayerState.Human:

@@ -23,7 +23,7 @@ class Reversi(object):
 
     Attributes:
         __chessMap: 2-D List. the board status.
-        __currentState: 2-D List. the current active player.
+        __currentState: BoardState object`. the current active player.
         __BlackCount: int. the total number of black pieces.
         __WhiteCount: int. the total number of white pieces.
     """
@@ -220,7 +220,6 @@ class Reversi(object):
             (extend_success, extend_count) = self.__extend(
                 pos_row, pos_col, self_state, oppo_state, xshift, yshift)
             if extend_success:
-                #print (xshift, yshift), (extend_success, extend_count)
                 new_row = pos_row
                 new_col = pos_col
                 for counter in range(extend_count):
@@ -235,13 +234,11 @@ class Reversi(object):
             return (-flip_count, flip_count)
         raise ValueError('Unknown Board State')
 
-    def __switch(self, self_state, oppo_state):
+    def __next(self):
         """Switch the current State of player.
         """
-        if self.check_availability(oppo_state):
-            self.__currentState = oppo_state
-        else:
-            self.__currentState = self_state
+        if self.check_availability(self.get_opponent_state()):
+            self.__currentState = self.get_opponent_state()
         return
 
     def validity_test(self, pos_row, pos_col, self_state, oppo_state):
@@ -284,6 +281,8 @@ class Reversi(object):
         oppo_state = self.get_opponent_state()
 
         if safety_check:
+            if type(pos_row) != int or type(pos_col) != int:
+                raise ValueError('Position data must be int')
             (valid, error_description) = self.validity_test(
                 pos_row, pos_col, self.__currentState, oppo_state)
             if not valid:
@@ -302,7 +301,7 @@ class Reversi(object):
         if self.__BlackCount < 0 or self.__WhiteCount < 0:
             raise ValueError('Negative Counter')
 
-        self.__switch(self.__currentState, oppo_state)
+        self.__next()
         return
 
     #----------Status Check----------#
